@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UniEngineers - Login</title>
+    <!-- Common Global CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <div class="app-container">
+
+        <!-- Branding -->
+        <div class="brand-header">
+            <h1>UniEngineers</h1>
+            <p>Trusted Engineering Services, On-Demand.</p>
+        </div>
+
+        <!-- Glassmorphism Main Card -->
+        <div class="glass-card">
+
+            <!-- LOGIN FORM -->
+            <div id="login-section" class="form-section">
+                <h2>Welcome Back</h2>
+                <div class="input-group">
+                    <input type="email" id="login-email" placeholder="Email Address" required>
+                </div>
+                <div class="input-group">
+                    <input type="password" id="login-password" placeholder="Password" required>
+                </div>
+                <button id="btn-login" class="btn-primary">Login</button>
+                <p class="toggle-text">Don't have an account? <span id="go-to-signup">Sign up</span></p>
+            </div>
+
+            <!-- SIGNUP FORM (Hidden by default) -->
+            <div id="signup-section" class="form-section hidden">
+                <h2>Create Account</h2>
+                <div class="input-group">
+                    <input type="text" id="signup-name" placeholder="Full Name" required>
+                </div>
+                <div class="input-group">
+                    <input type="email" id="signup-email" placeholder="Email Address" required>
+                </div>
+                <div class="input-group">
+                    <input type="password" id="signup-password" placeholder="Set Password" required>
+                </div>
+                <button id="btn-signup" class="btn-primary">Sign Up</button>
+                <p class="toggle-text">Already have an account? <span id="go-to-login">Login</span></p>
+            </div>
+
+        </div>
+    </div>
+
+    <!-- Page Specific JavaScript -->
+    <script type="module" src="index.js"></script>
+</body>
+
+</html>

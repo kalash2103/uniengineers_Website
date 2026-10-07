@@ -1,0 +1,842 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>UniEngineers - Premium Services</title>
+
+    <!-- Google Maps API -->
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBHKSYzQp9IEC3JUuYLhg9-fS8wwdSsEYg&libraries=places"></script>
+
+    <style>
+        /* ==========================================================================
+           APPLE-INSPIRED DESIGN SYSTEM (CUPERTINO STYLE)
+           ========================================================================== */
+        
+         :root {
+            /* Apple Color Palette */
+            --sys-blue: #007AFF;
+            --sys-blue-hover: #0056b3;
+            --sys-bg-light: #F2F2F7;
+            --sys-card-bg: rgba(255, 255, 255, 0.75);
+            --sys-text-primary: #1C1C1E;
+            --sys-text-secondary: #8E8E93;
+            --sys-border: rgba(60, 60, 67, 0.1);
+            --glass-blur: blur(24px) saturate(180%);
+            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.04);
+            --shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.08);
+            --radius-sm: 12px;
+            --radius-md: 20px;
+            --radius-lg: 32px;
+            --transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+        /* Reset & Typography */
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        
+        body {
+            /* SF Pro Display fallback */
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--sys-bg-light);
+            background-image: radial-gradient(at 0% 0%, rgba(0, 122, 255, 0.05) 0px, transparent 50%), radial-gradient(at 100% 100%, rgba(52, 199, 89, 0.05) 0px, transparent 50%);
+            background-attachment: fixed;
+            color: var(--sys-text-primary);
+            min-height: 100vh;
+            display: flex;
+            overflow-x: hidden;
+        }
+        
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+        
+        button {
+            font-family: inherit;
+            cursor: pointer;
+            border: none;
+            outline: none;
+        }
+        /* Custom Scrollbar for PC */
+        
+         ::-webkit-scrollbar {
+            width: 8px;
+        }
+        
+         ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        
+         ::-webkit-scrollbar-thumb {
+            background: rgba(0, 0, 0, 0.15);
+            border-radius: 10px;
+        }
+        
+         ::-webkit-scrollbar-thumb:hover {
+            background: rgba(0, 0, 0, 0.3);
+        }
+        /* ==========================================================================
+           LAYOUT ARCHITECTURE (PC FIRST, MOBILE ADAPTIVE)
+           ========================================================================== */
+        
+        .app-wrapper {
+            display: flex;
+            width: 100%;
+            max-width: 1600px;
+            margin: 0 auto;
+            position: relative;
+        }
+        /* ---------------------------------------------------
+           1. SIDEBAR (PC ONLY)
+           --------------------------------------------------- */
+        
+        .desktop-sidebar {
+            width: 280px;
+            height: 100vh;
+            position: sticky;
+            top: 0;
+            background: var(--sys-card-bg);
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
+            border-right: 1px solid var(--sys-border);
+            padding: 32px 24px;
+            display: flex;
+            flex-direction: column;
+            z-index: 100;
+        }
+        
+        .brand-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 48px;
+        }
+        
+        .brand-logo svg {
+            width: 32px;
+            height: 32px;
+            color: var(--sys-blue);
+        }
+        
+        .brand-logo h1 {
+            font-size: 22px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+        
+        .sidebar-nav {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            flex: 1;
+        }
+        
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 14px 16px;
+            border-radius: var(--radius-sm);
+            color: var(--sys-text-secondary);
+            font-size: 15px;
+            font-weight: 600;
+            transition: var(--transition);
+        }
+        
+        .nav-link svg {
+            width: 22px;
+            height: 22px;
+            stroke-width: 2px;
+        }
+        
+        .nav-link:hover {
+            background: rgba(0, 0, 0, 0.04);
+            color: var(--sys-text-primary);
+        }
+        
+        .nav-link.active {
+            background: var(--sys-blue);
+            color: #fff;
+            box-shadow: 0 4px 12px rgba(0, 122, 255, 0.3);
+        }
+        
+        .user-profile-widget {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 16px;
+            background: rgba(255, 255, 255, 0.5);
+            border: 1px solid var(--sys-border);
+            border-radius: var(--radius-md);
+            margin-top: auto;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .user-profile-widget:hover {
+            background: #fff;
+        }
+        
+        .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--sys-blue);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+            font-size: 16px;
+        }
+        
+        .user-info p {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--sys-text-primary);
+        }
+        
+        .user-info span {
+            font-size: 12px;
+            color: var(--sys-text-secondary);
+        }
+        /* ---------------------------------------------------
+           2. MAIN CONTENT AREA
+           --------------------------------------------------- */
+        
+        .main-content {
+            flex: 1;
+            padding: 40px 64px;
+            max-width: 1100px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 48px;
+        }
+        /* Header (Location & Time) */
+        
+        .content-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+        }
+        
+        .greeting h2 {
+            font-size: 34px;
+            font-weight: 700;
+            letter-spacing: -1px;
+            margin-bottom: 8px;
+        }
+        
+        .location-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--sys-card-bg);
+            backdrop-filter: var(--glass-blur);
+            padding: 8px 16px;
+            border-radius: 30px;
+            border: 1px solid var(--sys-border);
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--sys-blue);
+            box-shadow: var(--shadow-sm);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .location-badge:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+        /* ---------------------------------------------------
+           3. HERO & AI SEARCH SECTION (APPLE STYLE)
+           --------------------------------------------------- */
+        
+        .hero-search-container {
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 300" preserveAspectRatio="none"><defs><linearGradient id="g" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="%23007AFF" stop-opacity="0.1"/><stop offset="100%" stop-color="%2334C759" stop-opacity="0.05"/></linearGradient></defs><rect width="1000" height="300" fill="url(%23g)"/></svg>') center/cover;
+            background-color: #fff;
+            border-radius: var(--radius-lg);
+            padding: 56px 48px;
+            border: 1px solid var(--sys-border);
+            box-shadow: var(--shadow-lg);
+            position: relative;
+            overflow: hidden;
+            text-align: center;
+        }
+        
+        .hero-search-container h3 {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 12px;
+            letter-spacing: -0.5px;
+        }
+        
+        .hero-search-container p {
+            font-size: 16px;
+            color: var(--sys-text-secondary);
+            margin-bottom: 32px;
+        }
+        
+        .ai-search-bar {
+            display: flex;
+            align-items: center;
+            background: rgba(255, 255, 255, 0.9);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            border-radius: 30px;
+            padding: 8px 8px 8px 24px;
+            max-width: 600px;
+            margin: 0 auto;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+            transition: var(--transition);
+            position: relative;
+            z-index: 2;
+        }
+        
+        .ai-search-bar:focus-within {
+            box-shadow: 0 0 0 4px rgba(0, 122, 255, 0.2);
+            border-color: var(--sys-blue);
+            transform: translateY(-2px);
+        }
+        
+        .ai-search-bar input {
+            flex: 1;
+            border: none;
+            background: transparent;
+            font-size: 16px;
+            color: var(--sys-text-primary);
+            outline: none;
+        }
+        
+        .ai-search-bar input::placeholder {
+            color: #A1A1A6;
+        }
+        
+        .mic-btn {
+            background: transparent;
+            color: var(--sys-text-secondary);
+            padding: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: var(--transition);
+        }
+        
+        .mic-btn:hover {
+            color: var(--sys-blue);
+        }
+        
+        .search-btn {
+            background: var(--sys-blue);
+            color: white;
+            padding: 14px 28px;
+            border-radius: 24px;
+            font-size: 15px;
+            font-weight: 600;
+            box-shadow: 0 4px 12px rgba(0, 122, 255, 0.3);
+            transition: var(--transition);
+        }
+        
+        .search-btn:hover {
+            background: var(--sys-blue-hover);
+            transform: scale(1.02);
+        }
+        /* ---------------------------------------------------
+           4. CATEGORIES GRID (SQUIRCLES)
+           --------------------------------------------------- */
+        
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 24px;
+        }
+        
+        .section-header h3 {
+            font-size: 22px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+        
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+            gap: 24px;
+        }
+        
+        .category-card {
+            background: var(--sys-card-bg);
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
+            border: 1px solid var(--sys-border);
+            border-radius: var(--radius-md);
+            padding: 24px 16px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 16px;
+            text-align: center;
+            cursor: pointer;
+            transition: var(--transition);
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .category-card:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: var(--shadow-lg);
+            background: #fff;
+            border-color: rgba(0, 122, 255, 0.2);
+        }
+        
+        .icon-wrapper {
+            width: 56px;
+            height: 56px;
+            background: rgba(0, 122, 255, 0.08);
+            border-radius: 16px;
+            /* Squircle */
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--sys-blue);
+            transition: var(--transition);
+        }
+        
+        .category-card:hover .icon-wrapper {
+            background: var(--sys-blue);
+            color: white;
+        }
+        
+        .icon-wrapper svg {
+            width: 28px;
+            height: 28px;
+            stroke-width: 1.5px;
+        }
+        
+        .category-card p {
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--sys-text-primary);
+        }
+        /* ---------------------------------------------------
+           5. ACTIVE BOOKING BANNER (DYNAMIC WIDGET)
+           --------------------------------------------------- */
+        
+        .active-job-widget {
+            background: linear-gradient(135deg, #1C1C1E, #2C2C2E);
+            border-radius: var(--radius-md);
+            padding: 24px 32px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: white;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .active-job-widget::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle, rgba(0, 122, 255, 0.2) 0%, transparent 50%);
+            animation: rotateBg 10s linear infinite;
+        }
+        
+        @keyframes rotateBg {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+        
+        .job-details {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+        }
+        
+        .pulsing-dot {
+            width: 12px;
+            height: 12px;
+            background: #34C759;
+            border-radius: 50%;
+            box-shadow: 0 0 0 0 rgba(52, 199, 89, 0.7);
+            animation: pulse-green 2s infinite;
+        }
+        
+        @keyframes pulse-green {
+            0% {
+                transform: scale(0.95);
+                box-shadow: 0 0 0 0 rgba(52, 199, 89, 0.7);
+            }
+            70% {
+                transform: scale(1);
+                box-shadow: 0 0 0 10px rgba(52, 199, 89, 0);
+            }
+            100% {
+                transform: scale(0.95);
+                box-shadow: 0 0 0 0 rgba(52, 199, 89, 0);
+            }
+        }
+        
+        .job-details h4 {
+            font-size: 18px;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+        
+        .job-details p {
+            font-size: 14px;
+            color: #E5E5EA;
+            opacity: 0.9;
+        }
+        
+        .track-btn {
+            position: relative;
+            z-index: 2;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            padding: 10px 24px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 14px;
+            transition: var(--transition);
+        }
+        
+        .track-btn:hover {
+            background: #fff;
+            color: #1C1C1E;
+        }
+        /* ---------------------------------------------------
+           6. MOBILE BOTTOM NAV (HIDDEN ON PC)
+           --------------------------------------------------- */
+        
+        .mobile-bottom-nav {
+            display: none;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
+            border-top: 1px solid var(--sys-border);
+            padding: 12px 24px 24px;
+            /* extra padding for iPhone indicator */
+            z-index: 1000;
+        }
+        /* ==========================================================================
+           RESPONSIVE DESIGN (MEDIA QUERIES)
+           ========================================================================== */
+        /* Tablet & Smaller PC View */
+        
+        @media (max-width: 1024px) {
+            .main-content {
+                padding: 32px;
+            }
+            .hero-search-container {
+                padding: 40px 24px;
+            }
+        }
+        /* Mobile View (iPhone/Android) */
+        
+        @media (max-width: 768px) {
+            body {
+                padding-bottom: 80px;
+            }
+            /* Space for bottom nav */
+            .desktop-sidebar {
+                display: none;
+            }
+            /* Hide Sidebar */
+            .mobile-bottom-nav {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+            .mob-nav-item {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 4px;
+                color: var(--sys-text-secondary);
+                transition: var(--transition);
+                flex: 1;
+            }
+            .mob-nav-item svg {
+                width: 24px;
+                height: 24px;
+                stroke-width: 1.5px;
+            }
+            .mob-nav-item span {
+                font-size: 11px;
+                font-weight: 600;
+            }
+            .mob-nav-item.active {
+                color: var(--sys-blue);
+            }
+            .mob-nav-item.active svg {
+                stroke-width: 2.5px;
+                fill: rgba(0, 122, 255, 0.1);
+            }
+            .main-content {
+                padding: 24px 16px;
+                gap: 32px;
+            }
+            .content-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 16px;
+            }
+            .greeting h2 {
+                font-size: 28px;
+            }
+            .hero-search-container {
+                border-radius: var(--radius-md);
+            }
+            .hero-search-container h3 {
+                font-size: 24px;
+            }
+            .ai-search-bar {
+                padding: 6px 6px 6px 16px;
+                flex-direction: row;
+            }
+            .search-btn {
+                padding: 10px 16px;
+                font-size: 14px;
+            }
+            .ai-search-bar input {
+                font-size: 14px;
+            }
+            .grid-container {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 16px;
+            }
+            .active-job-widget {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 16px;
+                padding: 20px;
+            }
+            .track-btn {
+                width: 100%;
+                text-align: center;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="app-wrapper">
+
+        <!-- ==========================================
+             SIDEBAR (DESKTOP UI)
+             ========================================== -->
+        <aside class="desktop-sidebar">
+            <div class="brand-logo">
+                <!-- Premium Abstract Wrench/Infinity Logo SVG -->
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
+                </svg>
+                <h1>UniEngineers</h1>
+            </div>
+
+            <nav class="sidebar-nav">
+                <a href="home.html" class="nav-link active">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg> Dashboard
+                </a>
+                <a href="tracking.html" class="nav-link">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> Active Jobs
+                </a>
+                <a href="vault.html" class="nav-link">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg> Service Vault
+                </a>
+                <a href="#" class="nav-link">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>                    Settings
+                </a>
+            </nav>
+
+            <div class="user-profile-widget" id="btn-logout" title="Click to Logout">
+                <div class="avatar" id="avatar-initial">U</div>
+                <div class="user-info">
+                    <p id="sidebar-user-name">Loading...</p>
+                    <span>Premium Member</span>
+                </div>
+            </div>
+        </aside>
+
+        <!-- ==========================================
+             MAIN CONTENT AREA (RESPONSIVE)
+             ========================================== -->
+        <main class="main-content">
+
+            <!-- 1. Top Header -->
+            <header class="content-header">
+                <div class="greeting">
+                    <h2 id="user-greeting">Good Morning.</h2>
+                    <p style="color: var(--sys-text-secondary); font-size: 16px;">What needs fixing today?</p>
+                </div>
+                <div class="location-badge" id="user-location">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"/><circle cx="12" cy="10" r="3"/></svg> Fetching location...
+                </div>
+            </header>
+
+            <!-- 2. AI Search Hero Banner -->
+            <section class="hero-search-container">
+                <h3>Smart Diagnosis</h3>
+                <p>Describe your problem in plain words, and our AI will find the exact expert.</p>
+
+                <div class="ai-search-bar">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#8E8E93" stroke-width="2" style="margin-right: 8px;"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+                    <input type="text" id="ai-search-input" placeholder="e.g., Water is leaking under the kitchen sink...">
+
+                    <button class="mic-btn" title="Voice Search">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg>
+                    </button>
+
+                    <button id="btn-search" class="search-btn">Find Expert</button>
+                </div>
+            </section>
+
+            <!-- 3. Active Booking Widget (Injected via JS if active, visible here for structure) -->
+            <section class="active-job-widget" id="dynamic-active-job" style="display: none;">
+                <div class="job-details">
+                    <div class="pulsing-dot"></div>
+                    <div>
+                        <h4>Ramesh (Electrician) is arriving soon</h4>
+                        <p>ETA: 12 minutes • Toyota Prius (MH-12-AB-1234)</p>
+                    </div>
+                </div>
+                <button class="track-btn" onclick="window.location.href='tracking.html'">Live Track</button>
+            </section>
+
+            <!-- 4. Quick Categories -->
+            <section>
+                <div class="section-header">
+                    <h3>Popular Services</h3>
+                    <a href="#" style="color: var(--sys-blue); font-weight: 600; font-size: 14px;">View All</a>
+                </div>
+
+                <div class="categories-grid grid-container">
+
+                    <a href="search.html?category=Plumber" class="category-card">
+                        <div class="icon-wrapper">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 2.69l5.66 5.66a8 8 0 1 1-11.31 0z"/></svg>
+                        </div>
+                        <p>Plumbing</p>
+                    </a>
+
+                    <a href="search.html?category=Electrician" class="category-card">
+                        <div class="icon-wrapper">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>
+                        </div>
+                        <p>Electrical</p>
+                    </a>
+
+                    <a href="search.html?category=AC-Repair" class="category-card">
+                        <div class="icon-wrapper">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                        </div>
+                        <p>AC Repair</p>
+                    </a>
+
+                    <a href="search.html?category=Carpenter" class="category-card">
+                        <div class="icon-wrapper">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"/><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"/></svg>
+                        </div>
+                        <p>Carpentry</p>
+                    </a>
+
+                    <a href="search.html?category=Appliances" class="category-card">
+                        <div class="icon-wrapper">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><rect x="4" y="2" width="16" height="20" rx="2" ry="2"/><line x1="4" y1="9" x2="20" y2="9"/><line x1="10" y1="14" x2="14" y2="14"/></svg>
+                        </div>
+                        <p>Appliances</p>
+                    </a>
+
+                    <a href="search.html?category=Cleaning" class="category-card">
+                        <div class="icon-wrapper">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M21.5 2v6h-19V2h19zM21.5 8l-3 14h-13l-3-14"/></svg>
+                        </div>
+                        <p>Cleaning</p>
+                    </a>
+                </div>
+            </section>
+
+            <!-- 5. Trust / Why Choose Us Banner (Adds professional depth) -->
+            <section style="margin-top: 24px; padding: 32px; background: rgba(0, 122, 255, 0.05); border-radius: var(--radius-md); border: 1px dashed rgba(0, 122, 255, 0.2); text-align: center;">
+                <h3 style="font-size: 20px; font-weight: 700; margin-bottom: 16px; color: var(--sys-blue);">The UniEngineers Guarantee</h3>
+                <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 24px;">
+                    <div style="display: flex; align-items: center; gap: 8px; color: var(--sys-text-secondary); font-size: 14px;">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#34C759" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg> 100% Background Verified
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 8px; color: var(--sys-text-secondary); font-size: 14px;">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#007AFF" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> Transparent Pricing
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 8px; color: var(--sys-text-secondary); font-size: 14px;">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FF9500" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg> 30-Day Service Warranty
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- ==========================================
+         BOTTOM NAVIGATION (MOBILE ONLY)
+         ========================================== -->
+    <nav class="mobile-bottom-nav">
+        <a href="home.html" class="mob-nav-item active">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+            <span>Home</span>
+        </a>
+        <a href="tracking.html" class="mob-nav-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            <span>Track</span>
+        </a>
+        <a href="vault.html" class="mob-nav-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+            <span>Vault</span>
+        </a>
+        <a href="#" class="mob-nav-item" id="mob-btn-logout">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+            <span>Logout</span>
+        </a>
+    </nav>
+
+    <!-- Connect the same robust JS logic -->
+    <script type="module" src="home.js"></script>
+
+    <script>
+        // Inline UI mock interactions to showcase the premium feel even before JS loads real data.
+        // The real 'home.js' will overwrite these with Firebase data.
+
+        // Mock showing active job widget for demonstration purposes if local storage has a flag.
+        document.addEventListener("DOMContentLoaded", () => {
+            const activeJobWidget = document.getElementById('dynamic-active-job');
+            // Simulating an active job for UI review
+            if (localStorage.getItem('simulate_active_job') === 'true') {
+                activeJobWidget.style.display = 'flex';
+            }
+        });
+    </script>
+</body>
+
+</html>

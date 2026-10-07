@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>UniEngineers - Live Tracking</title>
+
+    <!-- Google Maps API -->
+    <script src="pk.eyJ1Ijoic2hyZXlhc2gxM3l5eSIsImEiOiJjbXV0c3JtaTcxZXM2MndzMWp1cXVrYXk1In0.lwJwEB-uobw-XmR1MkezQg"></script>
+
+    <style>
+        /* ==========================================================================
+           TRACKING PAGE EMBEDDED CSS (CUPERTINO / APPLE STYLE)
+           ========================================================================== */
+        
+         :root {
+            --sys-blue: #007AFF;
+            --sys-blue-hover: #0056b3;
+            --sys-bg-light: #F2F2F7;
+            --sys-card-bg: rgba(255, 255, 255, 0.85);
+            --sys-text-primary: #1C1C1E;
+            --sys-text-secondary: #8E8E93;
+            --sys-border: rgba(60, 60, 67, 0.1);
+            --glass-blur: blur(24px) saturate(180%);
+            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.04);
+            --shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.08);
+            --radius-md: 20px;
+            --radius-lg: 32px;
+            --transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-font-smoothing: antialiased;
+        }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--sys-bg-light);
+            color: var(--sys-text-primary);
+            min-height: 100vh;
+            display: flex;
+            overflow-x: hidden;
+        }
+        
+        a {
+            text-decoration: none;
+            color: inherit;
+        }
+        
+        button {
+            font-family: inherit;
+            cursor: pointer;
+            border: none;
+            outline: none;
+        }
+        
+        .app-wrapper {
+            display: flex;
+            width: 100%;
+            max-width: 1600px;
+            margin: 0 auto;
+            position: relative;
+        }
+        /* Desktop Sidebar */
+        
+        .desktop-sidebar {
+            width: 280px;
+            height: 100vh;
+            position: sticky;
+            top: 0;
+            background: var(--sys-card-bg);
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
+            border-right: 1px solid var(--sys-border);
+            padding: 32px 24px;
+            display: flex;
+            flex-direction: column;
+            z-index: 100;
+        }
+        
+        .brand-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 48px;
+        }
+        
+        .brand-logo svg {
+            width: 32px;
+            height: 32px;
+            color: var(--sys-blue);
+        }
+        
+        .brand-logo h1 {
+            font-size: 22px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+        
+        .sidebar-nav {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            flex: 1;
+        }
+        
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 14px 16px;
+            border-radius: 12px;
+            color: var(--sys-text-secondary);
+            font-size: 15px;
+            font-weight: 600;
+            transition: var(--transition);
+        }
+        
+        .nav-link svg {
+            width: 22px;
+            height: 22px;
+            stroke-width: 2px;
+        }
+        
+        .nav-link:hover {
+            background: rgba(0, 0, 0, 0.04);
+            color: var(--sys-text-primary);
+        }
+        
+        .nav-link.active {
+            background: var(--sys-blue);
+            color: #fff;
+            box-shadow: 0 4px 12px rgba(0, 122, 255, 0.3);
+        }
+        
+        .user-profile-widget {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 16px;
+            background: rgba(255, 255, 255, 0.5);
+            border: 1px solid var(--sys-border);
+            border-radius: var(--radius-md);
+            margin-top: auto;
+            cursor: pointer;
+        }
+        
+        .avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--sys-blue);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 600;
+        }
+        
+        .user-info p {
+            font-size: 14px;
+            font-weight: 600;
+        }
+        
+        .user-info span {
+            font-size: 12px;
+            color: var(--sys-text-secondary);
+        }
+        /* Main Content */
+        
+        .main-content {
+            flex: 1;
+            padding: 40px 64px 140px;
+            max-width: 1100px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+        
+        .inner-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+        
+        .back-btn {
+            background: var(--sys-card-bg);
+            border: 1px solid var(--sys-border);
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
+            border-radius: 50%;
+            width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--sys-text-primary);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .back-btn:hover {
+            background: #fff;
+            transform: translateX(-4px);
+        }
+        
+        .page-title {
+            font-size: 26px;
+            font-weight: 700;
+            letter-spacing: -0.5px;
+        }
+        /* Live Map Container */
+        
+        .live-map-container {
+            width: 100%;
+            height: 360px;
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            border: 1px solid var(--sys-border);
+            box-shadow: var(--shadow-sm);
+            position: relative;
+            background: #e5e5ea;
+        }
+        
+        #google-map {
+            width: 100%;
+            height: 100%;
+        }
+        /* ETA Card Floating Over Map */
+        
+        .eta-floating-card {
+            background: var(--sys-card-bg);
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
+            border: 1px solid var(--sys-border);
+            border-radius: var(--radius-md);
+            padding: 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: var(--shadow-lg);
+        }
+        
+        .eta-title {
+            font-size: 13px;
+            color: var(--sys-text-secondary);
+            font-weight: 600;
+            text-transform: uppercase;
+            margin-bottom: 4px;
+        }
+        
+        .eta-time {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--sys-blue);
+            letter-spacing: -0.5px;
+        }
+        
+        .job-status-pill {
+            background: rgba(52, 199, 89, 0.1);
+            color: #34C759;
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .pulsing-dot {
+            width: 8px;
+            height: 8px;
+            background: #34C759;
+            border-radius: 50%;
+            animation: pulse-green 2s infinite;
+        }
+        
+        @keyframes pulse-green {
+            0% {
+                transform: scale(0.95);
+                box-shadow: 0 0 0 0 rgba(52, 199, 89, 0.7);
+            }
+            70% {
+                transform: scale(1);
+                box-shadow: 0 0 0 8px rgba(52, 199, 89, 0);
+            }
+            100% {
+                transform: scale(0.95);
+                box-shadow: 0 0 0 0 rgba(52, 199, 89, 0);
+            }
+        }
+        /* Expert Assigned Details Card */
+        
+        .expert-dispatch-card {
+            background: var(--sys-card-bg);
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
+            border: 1px solid var(--sys-border);
+            border-radius: var(--radius-lg);
+            padding: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .dispatch-left {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+        
+        .dispatch-dp {
+            width: 64px;
+            height: 64px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 2px solid #fff;
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .dispatch-info h3 {
+            font-size: 18px;
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+        
+        .dispatch-info p {
+            font-size: 13px;
+            color: var(--sys-text-secondary);
+            font-weight: 500;
+        }
+        
+        .action-icon-btns {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .icon-action-btn {
+            width: 48px;
+            height: 48px;
+            border-radius: 50%;
+            background: rgba(0, 122, 255, 0.1);
+            color: var(--sys-blue);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .icon-action-btn:hover {
+            background: var(--sys-blue);
+            color: white;
+            transform: scale(1.05);
+        }
+        /* Timeline / Job Status Progress */
+        
+        .timeline-card {
+            background: var(--sys-card-bg);
+            backdrop-filter: var(--glass-blur);
+            border: 1px solid var(--sys-border);
+            border-radius: var(--radius-lg);
+            padding: 24px 32px;
+            box-shadow: var(--shadow-sm);
+        }
+        
+        .timeline-steps {
+            display: flex;
+            justify-content: space-between;
+            position: relative;
+            margin-top: 16px;
+        }
+        
+        .timeline-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            position: relative;
+            z-index: 2;
+            flex: 1;
+        }
+        
+        .step-circle {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: #e5e5ea;
+            color: var(--sys-text-secondary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 13px;
+            margin-bottom: 8px;
+            transition: var(--transition);
+        }
+        
+        .step-circle.completed {
+            background: #34C759;
+            color: white;
+        }
+        
+        .step-circle.active {
+            background: var(--sys-blue);
+            color: white;
+            box-shadow: 0 0 0 4px rgba(0, 122, 255, 0.2);
+        }
+        
+        .step-label {
+            font-size: 12px;
+            font-weight: 600;
+            color: var(--sys-text-secondary);
+        }
+        
+        .step-label.active {
+            color: var(--sys-text-primary);
+        }
+        /* Mobile Bottom Nav */
+        
+        .mobile-bottom-nav {
+            display: none;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: var(--glass-blur);
+            border-top: 1px solid var(--sys-border);
+            padding: 12px 24px 24px;
+            z-index: 1000;
+        }
+        
+        @media (max-width: 768px) {
+            body {
+                padding-bottom: 80px;
+            }
+            .desktop-sidebar {
+                display: none;
+            }
+            .mobile-bottom-nav {
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+            }
+            .mob-nav-item {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                gap: 4px;
+                color: var(--sys-text-secondary);
+                flex: 1;
+            }
+            .mob-nav-item svg {
+                width: 24px;
+                height: 24px;
+            }
+            .mob-nav-item span {
+                font-size: 11px;
+                font-weight: 600;
+            }
+            .mob-nav-item.active {
+                color: var(--sys-blue);
+            }
+            .main-content {
+                padding: 24px 16px;
+            }
+            .live-map-container {
+                height: 280px;
+            }
+            .expert-dispatch-card {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 16px;
+            }
+            .action-icon-btns {
+                width: 100%;
+                justify-content: space-around;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="app-wrapper">
+
+        <!-- Desktop Sidebar -->
+        <aside class="desktop-sidebar">
+            <div class="brand-logo">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
+                </svg>
+                <h1>UniEngineers</h1>
+            </div>
+
+            <nav class="sidebar-nav">
+                <a href="home.html" class="nav-link">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg> Dashboard
+                </a>
+                <a href="tracking.html" class="nav-link active">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg> Active Jobs
+                </a>
+                <a href="vault.html" class="nav-link">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg> Service Vault
+                </a>
+            </nav>
+
+            <div class="user-profile-widget" id="btn-logout" title="Click to Logout">
+                <div class="avatar" id="avatar-initial">U</div>
+                <div class="user-info">
+                    <p id="sidebar-user-name">Loading...</p>
+                    <span>Premium Member</span>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+
+            <header class="inner-header">
+                <button onclick="window.location.href='home.html'" class="back-btn" title="Back to Home">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+                </button>
+                <h1 class="page-title">Live Execution</h1>
+            </header>
+
+            <!-- 1. ETA Floating Card -->
+            <div class="eta-floating-card">
+                <div>
+                    <div class="eta-title">Estimated Arrival</div>
+                    <div class="eta-time" id="eta-display">15 mins</div>
+                </div>
+                <div class="job-status-pill">
+                    <div class="pulsing-dot"></div>
+                    <span id="job-status-text">On the Way</span>
+                </div>
+            </div>
+
+            <!-- 2. Live Map Container -->
+            <div class="live-map-container">
+                <div id="google-map" style="width:100%; height:100%;"></div>
+            </div>
+
+            <!-- 3. Expert Dispatch Details Card -->
+            <div class="expert-dispatch-card" id="expert-dispatch-card">
+                <div class="dispatch-left">
+                    <img src="https://ui-avatars.com/api/?name=Expert&background=F2F2F7&color=007AFF&bold=true" alt="Expert DP" class="dispatch-dp" id="dispatch-dp">
+                    <div class="dispatch-info">
+                        <h3 id="dispatch-name">Loading Expert...</h3>
+                        <p id="dispatch-service">Verified Professional • 4.9 ⭐</p>
+                    </div>
+                </div>
+                <div class="action-icon-btns">
+                    <button class="icon-action-btn" id="btn-call" title="Call Expert">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                    </button>
+                    <button class="icon-action-btn" id="btn-chat" title="Chat with Expert">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                    </button>
+                </div>
+            </div>
+
+            <!-- 4. Timeline Progress -->
+            <div class="timeline-card">
+                <h3 style="font-size: 16px; font-weight: 700; margin-bottom: 8px;">Job Progress</h3>
+                <div class="timeline-steps">
+                    <div class="timeline-step">
+                        <div class="step-circle completed" id="step-1">✓</div>
+                        <span class="step-label active">Confirmed</span>
+                    </div>
+                    <div class="timeline-step">
+                        <div class="step-circle active" id="step-2">2</div>
+                        <span class="step-label active">On the Way</span>
+                    </div>
+                    <div class="timeline-step">
+                        <div class="step-circle" id="step-3">3</div>
+                        <span class="step-label">Arrived</span>
+                    </div>
+                    <div class="timeline-step">
+                        <div class="step-circle" id="step-4">4</div>
+                        <span class="step-label">Completed</span>
+                    </div>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <!-- Mobile Bottom Nav -->
+    <nav class="mobile-bottom-nav">
+        <a href="home.html" class="mob-nav-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+            <span>Home</span>
+        </a>
+        <a href="tracking.html" class="mob-nav-item active">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            <span>Track</span>
+        </a>
+        <a href="vault.html" class="mob-nav-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+            <span>Vault</span>
+        </a>
+    </nav>
+
+    <!-- JS file will be linked here when you say next -->
+    <script type="module" src="tracking.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+    <title>UniEngineers - Checkout & Settlement</title>
+    
+    <style>
+        /* ==========================================================================
+           CHECKOUT PAGE EMBEDDED CSS (CUPERTINO / APPLE STYLE)
+           ========================================================================== */
+        :root {
+            --sys-blue: #007AFF;
+            --sys-blue-hover: #0056b3;
+            --sys-bg-light: #F2F2F7;
+            --sys-card-bg: rgba(255, 255, 255, 0.85);
+            --sys-text-primary: #1C1C1E;
+            --sys-text-secondary: #8E8E93;
+            --sys-border: rgba(60, 60, 67, 0.1);
+            --glass-blur: blur(24px) saturate(180%);
+            --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.04);
+            --shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.08);
+            --radius-md: 20px;
+            --radius-lg: 32px;
+            --transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--sys-bg-light);
+            color: var(--sys-text-primary);
+            min-height: 100vh;
+            display: flex;
+            overflow-x: hidden;
+        }
+
+        a { text-decoration: none; color: inherit; }
+        button { font-family: inherit; cursor: pointer; border: none; outline: none; }
+
+        .app-wrapper {
+            display: flex;
+            width: 100%;
+            max-width: 1600px;
+            margin: 0 auto;
+            position: relative;
+        }
+
+        /* Desktop Sidebar */
+        .desktop-sidebar {
+            width: 280px;
+            height: 100vh;
+            position: sticky;
+            top: 0;
+            background: var(--sys-card-bg);
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
+            border-right: 1px solid var(--sys-border);
+            padding: 32px 24px;
+            display: flex;
+            flex-direction: column;
+            z-index: 100;
+        }
+
+        .brand-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 48px;
+        }
+        .brand-logo svg { width: 32px; height: 32px; color: var(--sys-blue); }
+        .brand-logo h1 { font-size: 22px; font-weight: 700; letter-spacing: -0.5px; }
+
+        .sidebar-nav {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            flex: 1;
+        }
+
+        .nav-link {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+            padding: 14px 16px;
+            border-radius: 12px;
+            color: var(--sys-text-secondary);
+            font-size: 15px;
+            font-weight: 600;
+            transition: var(--transition);
+        }
+        .nav-link svg { width: 22px; height: 22px; stroke-width: 2px; }
+        .nav-link:hover { background: rgba(0, 0, 0, 0.04); color: var(--sys-text-primary); }
+        .nav-link.active { background: var(--sys-blue); color: #fff; box-shadow: 0 4px 12px rgba(0, 122, 255, 0.3); }
+
+        .user-profile-widget {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 16px;
+            background: rgba(255,255,255,0.5);
+            border: 1px solid var(--sys-border);
+            border-radius: var(--radius-md);
+            margin-top: auto;
+            cursor: pointer;
+        }
+        .avatar {
+            width: 40px; height: 40px; border-radius: 50%;
+            background: var(--sys-blue); color: white;
+            display: flex; align-items: center; justify-content: center; font-weight: 600;
+        }
+        .user-info p { font-size: 14px; font-weight: 600; }
+        .user-info span { font-size: 12px; color: var(--sys-text-secondary); }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            padding: 40px 64px 140px;
+            max-width: 1100px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            gap: 32px;
+        }
+
+        .inner-header {
+            display: flex;
+            align-items: center;
+            gap: 16px;
+        }
+        .back-btn {
+            background: var(--sys-card-bg);
+            border: 1px solid var(--sys-border);
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
+            border-radius: 50%;
+            width: 44px; height: 44px;
+            display: flex; align-items: center; justify-content: center;
+            color: var(--sys-text-primary);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        .back-btn:hover { background: #fff; transform: translateX(-4px); }
+        .page-title { font-size: 26px; font-weight: 700; letter-spacing: -0.5px; }
+
+        /* Invoice Card Modules */
+        .checkout-card {
+            background: var(--sys-card-bg);
+            backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
+            border: 1px solid var(--sys-border);
+            border-radius: var(--radius-lg);
+            padding: 32px;
+            box-shadow: var(--shadow-sm);
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+        .section-heading {
+            font-size: 18px; font-weight: 700; color: var(--sys-text-primary);
+            display: flex; align-items: center; gap: 8px;
+        }
+        
+        .invoice-row {
+            display: flex; justify-content: space-between; font-size: 15px; padding: 10px 0;
+            border-bottom: 1px solid var(--sys-border); color: var(--sys-text-secondary);
+        }
+        .invoice-row.total {
+            border-bottom: none; font-weight: 700; font-size: 20px;
+            color: var(--sys-text-primary); margin-top: 8px;
+        }
+
+        /* Payment Method Options */
+        .payment-options {
+            display: flex; flex-direction: column; gap: 12px;
+        }
+        .payment-option {
+            background: rgba(255,255,255,0.5); border: 1px solid var(--sys-border);
+            border-radius: var(--radius-md); padding: 16px 20px; display: flex;
+            align-items: center; justify-content: space-between; cursor: pointer; transition: var(--transition);
+        }
+        .payment-option:hover { background: #fff; }
+        .payment-option.selected {
+            background: rgba(0, 122, 255, 0.05); border-color: var(--sys-blue);
+        }
+        .pay-left { display: flex; align-items: center; gap: 12px; font-weight: 600; font-size: 15px; }
+
+        /* Rating Star Widget */
+        .rating-container {
+            display: flex; justify-content: center; gap: 12px; margin: 10px 0 20px;
+        }
+        .star-btn {
+            background: none; font-size: 32px; cursor: pointer; color: #d1d1d6;
+            transition: transform 0.2s;
+        }
+        .star-btn.active { color: #FF9500; transform: scale(1.1); }
+
+        .feedback-textarea {
+            width: 100%; border: 1px solid var(--sys-border); background: rgba(255,255,255,0.5);
+            border-radius: var(--radius-md); padding: 16px; font-family: inherit; font-size: 14px;
+            color: var(--sys-text-primary); resize: none; height: 100px; outline: none;
+        }
+        .feedback-textarea:focus { border-color: var(--sys-blue); background: #fff; }
+
+        /* Floating Action Bar */
+        .floating-action-bar {
+            position: fixed; bottom: 0; left: 280px; right: 0;
+            background: rgba(255, 255, 255, 0.85); backdrop-filter: var(--glass-blur);
+            -webkit-backdrop-filter: var(--glass-blur);
+            border-top: 1px solid var(--sys-border); padding: 20px 64px;
+            display: flex; justify-content: space-between; align-items: center; z-index: 999;
+            box-shadow: 0 -10px 30px rgba(0,0,0,0.05);
+        }
+        .price-estimate { display: flex; flex-direction: column; }
+        .est-label { font-size: 13px; color: var(--sys-text-secondary); font-weight: 600; }
+        .est-amount { font-size: 24px; font-weight: 700; color: var(--sys-text-primary); }
+        .btn-primary-large {
+            background: var(--sys-blue); color: white; border: none;
+            padding: 16px 40px; border-radius: 30px; font-size: 16px; font-weight: 600;
+            cursor: pointer; box-shadow: 0 4px 15px rgba(0, 122, 255, 0.3); transition: var(--transition);
+        }
+        .btn-primary-large:hover:not(:disabled) { background: var(--sys-blue-hover); transform: translateY(-2px); }
+
+        /* Mobile Bottom Nav */
+        .mobile-bottom-nav {
+            display: none; position: fixed; bottom: 0; left: 0; width: 100%;
+            background: rgba(255, 255, 255, 0.85); backdrop-filter: var(--glass-blur);
+            border-top: 1px solid var(--sys-border); padding: 12px 24px 24px; z-index: 1000;
+        }
+
+        @media (max-width: 768px) {
+            body { padding-bottom: 100px; }
+            .desktop-sidebar { display: none; }
+            .mobile-bottom-nav { display: flex; justify-content: space-between; align-items: center; }
+            .mob-nav-item {
+                display: flex; flex-direction: column; align-items: center; gap: 4px;
+                color: var(--sys-text-secondary); flex: 1;
+            }
+            .mob-nav-item svg { width: 24px; height: 24px; }
+            .mob-nav-item span { font-size: 11px; font-weight: 600; }
+            .mob-nav-item.active { color: var(--sys-blue); }
+            
+            .main-content { padding: 24px 16px 160px; }
+            .floating-action-bar { left: 0; bottom: 70px; padding: 16px 24px; }
+            .btn-primary-large { padding: 14px 24px; font-size: 15px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="app-wrapper">
+        
+        <!-- Desktop Sidebar -->
+        <aside class="desktop-sidebar">
+            <div class="brand-logo">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/>
+                </svg>
+                <h1>UniEngineers</h1>
+            </div>
+
+            <nav class="sidebar-nav">
+                <a href="home.html" class="nav-link">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+                    Dashboard
+                </a>
+                <a href="tracking.html" class="nav-link">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                    Active Jobs
+                </a>
+                <a href="vault.html" class="nav-link">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+                    Service Vault
+                </a>
+            </nav>
+
+            <div class="user-profile-widget" id="btn-logout" title="Click to Logout">
+                <div class="avatar" id="avatar-initial">U</div>
+                <div class="user-info">
+                    <p id="sidebar-user-name">Loading...</p>
+                    <span>Premium Member</span>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            
+            <header class="inner-header">
+                <button onclick="window.location.href='tracking.html'" class="back-btn" title="Back">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></svg>
+                </button>
+                <h1 class="page-title">Service Checkout & Invoice</h1>
+            </header>
+
+            <!-- 1. Invoice Breakdown Module -->
+            <section class="checkout-card">
+                <h3 class="section-heading">Invoice Summary</h3>
+                <div>
+                    <div class="invoice-row">
+                        <span>Visiting & Diagnosis Fee</span>
+                        <span id="bill-visiting-fee">₹299</span>
+                    </div>
+                    <div class="invoice-row">
+                        <span>Labor & Spare Parts</span>
+                        <span id="bill-labor-fee">₹450</span>
+                    </div>
+                    <div class="invoice-row">
+                        <span>Taxes & Platform Fee (18% GST)</span>
+                        <span id="bill-tax">₹134</span>
+                    </div>
+                    <div class="invoice-row total">
+                        <span>Total Payable</span>
+                        <span id="bill-total" style="color: var(--sys-blue);">₹883</span>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 2. Payment Method Module -->
+            <section class="checkout-card">
+                <h3 class="section-heading">Select Payment Method</h3>
+                <div class="payment-options">
+                    <div class="payment-option selected" data-method="upi">
+                        <div class="pay-left">
+                            <span>⚡</span> UPI / Google Pay / PhonePe / Paytm
+                        </div>
+                        <input type="radio" name="pay" checked>
+                    </div>
+                    <div class="payment-option" data-method="card">
+                        <div class="pay-left">
+                            <span>💳</span> Credit / Debit Card (Apple Pay Ready)
+                        </div>
+                        <input type="radio" name="pay">
+                    </div>
+                    <div class="payment-option" data-method="cash">
+                        <div class="pay-left">
+                            <span>💵</span> Cash after Service
+                        </div>
+                        <input type="radio" name="pay">
+                    </div>
+                </div>
+            </section>
+
+            <!-- 3. Expert Rating & Review Module -->
+            <section class="checkout-card">
+                <h3 class="section-heading">Rate Your Expert Experience</h3>
+                <div class="rating-container" id="star-rating-box">
+                    <button class="star-btn active" data-val="1">★</button>
+                    <button class="star-btn active" data-val="2">★</button>
+                    <button class="star-btn active" data-val="3">★</button>
+                    <button class="star-btn active" data-val="4">★</button>
+                    <button class="star-btn active" data-val="5">★</button>
+                </div>
+                <textarea class="feedback-textarea" id="review-comment" placeholder="Write a note about the expert's punctuality and quality of work..."></textarea>
+            </section>
+
+        </main>
+    </div>
+
+    <!-- Fixed Action Bar -->
+    <div class="floating-action-bar">
+        <div class="price-estimate">
+            <span class="est-label">Total Amount</span>
+            <span class="est-amount" id="footer-total">₹883</span>
+        </div>
+        <button class="btn-primary-large" id="btn-pay-complete">
+            Pay & Complete Service
+        </button>
+    </div>
+
+    <!-- Mobile Bottom Nav -->
+    <nav class="mobile-bottom-nav">
+        <a href="home.html" class="mob-nav-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+            <span>Home</span>
+        </a>
+        <a href="tracking.html" class="mob-nav-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            <span>Track</span>
+        </a>
+        <a href="vault.html" class="mob-nav-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor"><path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/></svg>
+            <span>Vault</span>
+        </a>
+    </nav>
+
+    <!-- JS file will be linked when you say next -->
+    <script type="module" src="checkout.js"></script>
+</body>
+</html>
